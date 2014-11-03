@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Rubberband : Rubberband: A small, flexible language">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Rubberband</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/romariorios/rubberband">View on GitHub</a>
+
+          <h1 id="project_title">Rubberband</h1>
+          <h2 id="project_tagline">Rubberband: A small, flexible language</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/romariorios/rubberband/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/romariorios/rubberband/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
+<a name="rubberband" class="anchor" href="#rubberband"><span class="octicon octicon-link"></span></a>RUBBERBAND</h3>
+
+<h2>
+<a name="whats-this" class="anchor" href="#whats-this"><span class="octicon octicon-link"></span></a>What's this?</h2>
+
+<p>Rubberband is a small experimental programming language aiming to be simple and self-extensible. The current version is by no means a final version, there's still a lot of stuff missing, but it's functional and playable with.</p>
+
+<h2>
+<a name="how-does-it-work" class="anchor" href="#how-does-it-work"><span class="octicon octicon-link"></span></a>How does it work?</h2>
+
+<p>Rubberband is object-oriented, assuming the following definition of <em>object</em>:</p>
+
+<blockquote>
+<p>An object is an entity which reacts to messages by answering a result and changing its internal state. Both the message and the result are also objects.</p>
+</blockquote>
+
+<p>To spawn a new object, the language makes some <em>literals</em> available, which can be used standalone, or in conjunction with other literals. Everything else is done based on sending messages. For instance, the expression <code>1 + 2</code> consists of three literals: two numbers (<code>1</code> and <code>2</code>) and a symbol (<code>+</code>). The symbol <code>+</code> is sent to <code>1</code> and, then, the number <code>2</code> is sent to the answer of <code>1 +</code>, returning <code>3</code>.</p>
+
+<h1>
+<a name="literals" class="anchor" href="#literals"><span class="octicon octicon-link"></span></a>Literals</h1>
+
+<p>The current literal types are available in Rubberband:</p>
+
+<ul>
+<li>the empty object: <code>()</code>
+</li>
+<li>number: <code>12</code>
+</li>
+<li>symbol: <code>haha</code>
+</li>
+<li>array: <code>|a, b, c</code> (or, optionally, <code>|[a, b, c]</code>)</li>
+<li>table: <code>:a -&gt; 10, b -&gt; 20, c -&gt; 30</code> (or, optionally, <code>|[a -&gt; 10, b -&gt; 20, c -&gt; 30]</code>)</li>
+<li>block: <code>{ !$ * $ }</code>
+</li>
+<li>message: <code>$</code>
+</li>
+<li>context: <code>~</code>
+</li>
+<li>self-ref: <code>@</code>
+</li>
+</ul>
+
+<h1>
+<a name="sending-messages" class="anchor" href="#sending-messages"><span class="octicon octicon-link"></span></a>Sending messages</h1>
+
+<p>The syntax to send messages is to simply place the message at the right side of the object:</p>
+
+<pre><code>|[a, b, c] 10
+</code></pre>
+
+<p>The message <code>10</code> is being sent to the array <code>|[a, b, c]</code>. Note that the brackets are needed to indicate where the array ends: otherwise, if we had, say <code>|a, b, c 10</code>, the message <code>10</code> would be sent to the symbol <code>c</code>, which is not valid to do.</p>
+
+<p>The sending messages operation is left associative, meaning that <code>1 + 2 + 3</code> is equivalent to <code>((((1 +) 2) +) 3)</code>.</p>
+
+<h2>
+<a name="what-can-it-do" class="anchor" href="#what-can-it-do"><span class="octicon octicon-link"></span></a>What can it do?</h2>
+
+<p>Right now, the literals and basic objects are mostly implemented, but strings, input and a lot of other stuff are missing. There's a print function, but it's more like an object inspector than anything else. There are a few functional examples at codeexamples.</p>
+
+<h1>
+<a name="factorial" class="anchor" href="#factorial"><span class="octicon octicon-link"></span></a>Factorial</h1>
+
+<pre><code># The context (~) is usually a table or behaves like one
+# To modify a table, you simply need to send another table
+# containing the fields you wanna change (e.g.: if the
+# context evaluates to :[a -&gt; 10], sending it :[b -&gt; 20] as
+# a message will change it to :[a -&gt; 10, b -&gt; 20])
+# In the case below, we're "declaring" a new block as fac
+# in the current context
+~:fac -&gt; {
+    # $ is the message received by the block
+    # ~ is the context of the current instance
+    # @ is a self-reference to this block
+    #
+    # n and fac have to be declared outside the else block
+    # because, inside them, they would be message and self-ref
+    # of that block.
+    # 
+    # @~ means the current block is being instantiated with
+    # the current context. A block literal isn't executable,
+    # because the context is still yet to be defined -- only
+    # block instances are executable.
+    ~:n -&gt; $, fac -&gt; @~
+
+    # ! indicates the return statement
+    # Below, we have the equivalent of an if statement on
+    # Rubberband. As we know, ~ usually is a table or behaves
+    # like one. Sending a symbol to a table will retrieve the
+    # object in that index (for instance, :[a -&gt; 10, b -&gt; 20] b
+    # returns 20). In the case below, we get the value of n
+    # stored above, which is the same as $. (~n &lt; 1) is a
+    # comparison operation and will return a boolean. The ?
+    # method of booleans receives the context (~, in the case
+    # below), the if block and the else block, respectively.
+    !~n &lt; 1?~ {
+        !1
+    } {
+        # Classic recursion. The parentheses are needed because, as
+        # said above, the send message operation is left associative,
+        # and something like ~fac ~n - 1 would mean
+        # (((((~ fac) ~) n) -) 1), clearly not what the user intended
+        !~n * (~fac(~n - 1))
+    }
+}:[]
+# ~fac is then instantiated with an empty table as a context
+
+# Will print 3628800
+~print(~fac 10)
+</code></pre>
+
+<h2>
+<a name="compiling" class="anchor" href="#compiling"><span class="octicon octicon-link"></span></a>Compiling</h2>
+
+<pre><code>git clone https://github.com/romariorios/rubberband
+cd rubberband
+cmake .
+make
+cd rbbs
+./rbbs your_program.rbb
+</code></pre>
+
+<h2>
+<a name="final-word" class="anchor" href="#final-word"><span class="octicon octicon-link"></span></a>Final word</h2>
+
+<p>Oh god what am I doing</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Rubberband maintained by <a href="https://github.com/romariorios">romariorios</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
