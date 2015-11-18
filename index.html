@@ -285,6 +285,80 @@ they're simply executed in left-to-right order. For instance, the expression
 <code>1 + 2 * 3 + 4</code> evaluates to <code>13</code>, instead of <code>11</code>, as one might expect; to
 evaluate it to the latter value, parentheses are needed, like this:
 <code>1 + (2 * 3) + 4</code>.</p>
+
+<p>Arithmetic comparison operations -- less than, greater than, etc. -- work in a
+similar way to that. The difference is that they result in a boolean object; in
+the example, the <code>overweight</code> variable will be assigned <code>?1</code>, that is, true.</p>
+
+<h4>
+<a id="control-flow" class="anchor" href="#control-flow" aria-hidden="true"><span class="octicon octicon-link"></span></a>Control Flow</h4>
+
+<p>There are no special keywords to handle control flow in the core language:
+control flow, just like other operations, is also done by sending messages --
+this time, to the boolean objects. For example, following the example from the
+previous subsection:</p>
+
+<pre><code>~overweight?~ {
+  %inspect_object i_am_overweight
+} {
+  %inspect_object i_am_fine
+}
+</code></pre>
+
+<p>Any boolean object responds to the <code>?</code> message, getting the context (this will
+be explained later) and two <em>blocks</em> of code: the first one is the block which
+gets executed if the boolean is <code>?1</code>; the second one, if it is <code>?0</code>. In other
+words, <code>?</code> gets sent to <code>~overweight</code>; then the context gets sent to the
+response of that, then <code>{ %inspect_object i_am_overweight }</code> is sent; then,
+finally, <code>{ %inspect_object i_am_fine }</code> (<code>%inspect_object</code> prints out the
+string representation of an object).</p>
+
+<p>Loops are not present in the core language, but they're provided by the standard
+library, which will be introduced later.</p>
+
+<h3>
+<a id="blocks" class="anchor" href="#blocks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Blocks</h3>
+
+<p>Blocks are briefly introduced in the beginning of the language introduction
+section and used in the previous example. Here, they're going to be explained in
+more detail.</p>
+
+<p><em>Blocks</em> define a sequence of instructions, optionally containing a response
+value. Here's an example of a block:</p>
+
+<pre><code>~:factorial -&gt; {
+  ~:n -&gt; $
+
+  !~n == 0?~ {
+    !1
+  } {
+    !~n * (@~(~n - 1))
+  }
+}
+</code></pre>
+
+<p>This block contains a code that calculates the factorial of a number. Of course,
+it still doesn't test if the received message is actually a number and not a
+symbol or an array, for instance, but this isn't so important right now: as long
+as the message is a natural number, it'll work. This example contains all
+special symbols that can be used inside a block, which are:</p>
+
+<ul>
+<li>
+<code>~</code>: This was already presented and it's the <em>context</em>, which is more or less
+like the scope of the code.</li>
+<li>
+<code>$</code>: The <em>message</em> received by the block. In our example, this would be
+the number for which we want to calculate the factorial.</li>
+<li>
+<code>@</code>: A reference to the block itself, thus, a <em>self-reference</em>.</li>
+<li>
+<code>!</code>: The exclamation mark defines the beggining of the <em>response expression</em>.
+The expression, in this case, is an "if else" statement, which responds
+the response of whichever block runs  -- either the "if" block or the "else"
+one. Here, if the received number is <code>0</code>, it responds <code>1</code>; otherwise, it
+responds <code>~n * (@~(~n - 1))</code>.</li>
+</ul>
       </section>
     </div>
 
