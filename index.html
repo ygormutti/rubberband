@@ -359,6 +359,46 @@ the response of whichever block runs  -- either the "if" block or the "else"
 one. Here, if the received number is <code>0</code>, it responds <code>1</code>; otherwise, it
 responds <code>~n * (@~(~n - 1))</code>.</li>
 </ul>
+
+<p>A bit more of detail is needed to understand what a context is. Blocks aren't
+actually executable -- at least, not directly. To execute the code inside a
+block, you need to <em>instance</em> it. A <em>block instance</em> is bound to an object until
+the end of its lifetime -- <em>that</em> object is the context, that is, the object
+which is represented by <code>~</code> inside the block. To create a new instance, you send
+an object which you want to bind the block to -- that is, the context. So, for
+instance, to calculate the factorial of some numbers using the code provided by
+the block above, we could do the following:</p>
+
+<pre><code>~:factorial_instance -&gt; ~factorial(:)
+%inspect_object(~factorial 6)   # 720
+%inspect_object(~factorial 10)  # 3628800
+%inspect_object(~factorial 12)  # 479001600
+</code></pre>
+
+<p>First, we create a new instance of the <code>factorial</code> block bound to a new empty
+table (which is used to store <code>n</code> inside the block). Then, in the following
+lines, we send some numbers as messages to that instance -- which, as it's been
+shown, are represented by <code>$</code> inside the block. One noteworthy difference
+between <code>~</code> -- the context -- and <code>$</code> -- the message -- is that, while the
+message may be different in each execution of the block instance, the context
+<em>is the same object</em> in all of its executions; in other words, any changes
+to the context are kept in the object after the block instance finishes
+executing. This didn't have an effect in the previous example, but consider
+this:</p>
+
+<pre><code>~:add -&gt; { ~:x -&gt; ~x + $ !~x }
+~:add_instance -&gt; ~add:x -&gt; 1
+%inspect_object(~add_instance 5)  # 6
+%inspect_object(~add_instance 6)  # 12
+%inspect_object(~add_instance 7)  # 19
+</code></pre>
+
+<p><code>add</code> gets a number, adds it to the value of <code>x</code>, attributes the value to that
+same variable and returns it. We, then, create an instance of it bound to the
+block <code>:x -&gt; 1</code> -- setting the initial value of <code>x</code> as <code>1</code>. As we call the
+instance again and again with new values, <code>x</code> keeps growing because the changes
+we do to the context in one call -- that is, the incrementation of the value --
+are still available in the next calls.</p>
       </section>
     </div>
 
