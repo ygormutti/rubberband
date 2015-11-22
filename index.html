@@ -274,11 +274,13 @@ functions</em> -- that is, functions that return other functions -- to emulate
 message parameters the way they work in Smalltalk or Self.</p>
 
 <p>Knowing this, let's interpret the <code>2 + 2</code> expression: the <code>+</code> message is sent
-to the <code>2</code> object; it's important to note that, in Rubberband, <code>+</code> is just a
+to the <code>2</code> object -- it's important to note that, in Rubberband, <code>+</code> is just a
 regular symbol, with no difference from a syntactic or semantic standpoint to,
 say, <code>plus</code> or <code>my_bmi</code>. The response to that message is a function that gets
 any number sent to it and answers that number plus 2. Then, we send <code>2</code> to the
-returned function, getting a <code>4</code>.</p>
+returned function, getting a <code>4</code>. For simplicity, from now on, function objects
+that are answers of symbol messages will be called <em>methods</em> -- for instance,
+the object <code>2</code> has the <code>+</code> method, which accepts a number as a message.</p>
 
 <p>Note that the operations in Rubberband do not have any precedence rules:
 they're simply executed in left-to-right order. For instance, the expression
@@ -286,9 +288,10 @@ they're simply executed in left-to-right order. For instance, the expression
 evaluate it to the latter value, parentheses are needed, like this:
 <code>1 + (2 * 3) + 4</code>.</p>
 
-<p>Arithmetic comparison operations -- less than, greater than, etc. -- work in a
-similar way to that. The difference is that they result in a boolean object; in
-the example, the <code>overweight</code> variable will be assigned <code>?1</code>, that is, true.</p>
+<p>Arithmetic comparison operations -- less than, greater than, etc. -- are also
+methods of any number, going by the names of <code>&lt;</code>, <code>&gt;</code>, etc.. The difference is
+that they result in a boolean object; in the example, the <code>overweight</code> variable
+will be assigned <code>?1</code>, that is, true.</p>
 
 <h4>
 <a id="control-flow" class="anchor" href="#control-flow" aria-hidden="true"><span class="octicon octicon-link"></span></a>Control Flow</h4>
@@ -305,16 +308,16 @@ previous subsection:</p>
 }
 </code></pre>
 
-<p>Any boolean object responds to the <code>?</code> message, getting the context (this will
-be explained later) and two <em>blocks</em> of code: the first one is the block which
-gets executed if the boolean is <code>?1</code>; the second one, if it is <code>?0</code>. In other
-words, <code>?</code> gets sent to <code>~overweight</code>; then the context gets sent to the
-response of that, then <code>{ %inspect_object i_am_overweight }</code> is sent; then,
-finally, <code>{ %inspect_object i_am_fine }</code> (<code>%inspect_object</code> prints out the
-string representation of an object).</p>
+<p>Any boolean object has the <code>?</code> method, which gets the context (this will be
+explained later) and two <em>blocks</em> of code: the first one is the block which gets
+executed if the boolean is <code>?1</code>; the second one, if it is <code>?0</code>. In other words,
+the <code>?</code> method gets the context, the <code>{ %inspect_object i_am_overweight }</code>
+block, and the <code>{ %inspect_object i_am_fine }</code> block (<code>%inspect_object</code> prints
+out the string representation of an object).</p>
 
-<p>Loops are not present in the core language, but they're provided by the standard
-library, which will be introduced later.</p>
+<p>Loops are not present in the core language, but they can be done through
+recursion (as we're going to see in the next section) and they're also provided
+by the standard library, which will be introduced later.</p>
 
 <h3>
 <a id="blocks" class="anchor" href="#blocks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Blocks</h3>
@@ -327,12 +330,12 @@ more detail.</p>
 value. Here's an example of a block:</p>
 
 <pre><code>~:factorial -&gt; {
-  ~:n -&gt; $
+  ~:n -&gt; $, self -&gt; @
 
   !~n == 0?~ {
     !1
   } {
-    !~n * (@~(~n - 1))
+    !~n * (~self~(~n - 1))
   }
 }
 </code></pre>
@@ -357,7 +360,7 @@ the number for which we want to calculate the factorial.</li>
 The expression, in this case, is an "if else" statement, which responds
 the response of whichever block runs  -- either the "if" block or the "else"
 one. Here, if the received number is <code>0</code>, it responds <code>1</code>; otherwise, it
-responds <code>~n * (@~(~n - 1))</code>.</li>
+responds <code>~n * (~self~(~n - 1))</code>.</li>
 </ul>
 
 <p>A bit more of detail is needed to understand what a context is. Blocks aren't
@@ -399,6 +402,44 @@ block <code>:x -&gt; 1</code> -- setting the initial value of <code>x</code> as 
 instance again and again with new values, <code>x</code> keeps growing because the changes
 we do to the context in one call -- that is, the incrementation of the value --
 are still available in the next calls.</p>
+
+<p>Going back to the factorial example, we can now understand why we have to pass a
+context object to the <code>?</code> method:</p>
+
+<pre><code>  !~n == 0?~ {
+    !1
+  } {
+    !~n * (~self~(~n - 1))
+  }
+</code></pre>
+
+<p>The two blocks sent to it (<code>{ !1 }</code> and <code>{ !~n * (~self~(~n - 1)) }</code>) are not
+block instances and, thus, aren't bound to any context. That method, then, needs
+a context to create an instance from one of those blocks to, then, execute it
+properly. Since we're passing <code>~</code> as their context, they will run over the same
+context of the <code>factorial</code> block; this means that will be able to directly
+access and modify anything in the parent context -- that's why <code>n</code> and <code>self</code>
+are accessible from inside the second block.</p>
+
+<p>A final note on why it was necessary to declare the <code>n</code> and <code>self</code> variables.
+That's needed because blocks don't automatically bind to their parent scope, so
+if we, instead, did:</p>
+
+<pre><code>~:factorial -&gt; {
+  !~n == 0?~ {
+    !1
+  } {
+    !$ * (@~(~n - 1))
+  }
+}
+</code></pre>
+
+<p>the code wouldn't work as expected, since the <code>$</code>, in this case, would be the
+message passed <em>to the else block</em>, which is <code>()</code>; since <code>()</code> has no <code>*</code> method,
+this would result in a runtime error. Even if the runtime error didn't happen,
+<code>@</code> is a reference to the else block, not to <code>factorial</code>; in this case, the
+stopping condition would never be checked and the program would enter in an
+endless loop.</p>
       </section>
     </div>
 
