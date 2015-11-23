@@ -31,25 +31,82 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h1>
-<a id="the-rubberband-programming-language" class="anchor" href="#the-rubberband-programming-language" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Rubberband Programming Language</h1>
+        <p>Rubberband is a very minimalistic and customizable experimental programming
+language. This manual introduces the language's goals and characteristics and,
+then, presents it in more detail. This document tries to aim at the newest
+version of Rubberband, but the language is not finished yet and it is constantly
+changing, so, at the moment you're reading this, the document may be outdated
+when compared to the actual implementation -- so beware.</p>
 
-<p>This manual is intended to cover the latest version of the Rubberband
-programming language.</p>
+<h1>
+<a id="building" class="anchor" href="#building" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building</h1>
+
+<p>The current project consists of the core library <code>librubberband</code> and the
+reference interpreter <code>rbbs</code> (stands for <strong>r</strong>ub<strong>b</strong>er<strong>b</strong>and <strong>s</strong>cript).
+Throughout the entirety of this manual, it is assumed that all examples are ran
+as scripts from the <code>rbbs</code> program.</p>
 
 <h2>
-<a id="building" class="anchor" href="#building" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building</h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h2>
 
-<p>TODO base this section in current README.md</p>
+<p>Currently, the dependencies to build Rubberband are:</p>
+
+<ul>
+<li>CMake (&gt;= 2.8)</li>
+<li>Make</li>
+<li>g++ and gcc (&gt;= 4.8) or clang (&gt;= 3.3)</li>
+</ul>
+
+<p>No extra dependencies are needed. Note that it's possible that it works in a
+different configuration -- e.g., a newer version of clang or gcc --, but it has
+never been tested.</p>
 
 <h2>
-<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h2>
+<a id="compiling-rbbs" class="anchor" href="#compiling-rbbs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compiling rbbs</h2>
+
+<p>If you just want to build and run <code>rbbs</code>, from inside the <code>src</code> subdirectory of
+the repository, run:</p>
+
+<pre><code>cmake . &amp;&amp; make
+</code></pre>
+
+<p>The <code>rbbs</code> executable will be found at the <code>rbbs</code> subdir and then you can just
+use it, passing the .rbb script as an argument. You can find examples in the
+<code>codeexamples</code> directory in the repository -- there are two at the moment of
+this writing.</p>
+
+<p>For more info on how to use CMake, check out its own documentation.</p>
+
+<h2>
+<a id="running-tests" class="anchor" href="#running-tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running tests</h2>
+
+<p>You can also run the tests of the <code>librubberband</code> library. There's a
+<code>runtests.sh</code> script inside the <code>src/test</code> dir, which can be run from any fairly
+recent version of Bash. The following variables are used:</p>
+
+<ul>
+<li>
+<code>CXX</code>: The c++ compiler</li>
+<li>
+<code>CXX_FLAGS</code> (default: <code>"-g -O0"</code> when CXX is either g++ or clang++): Flags
+passed to the compiler </li>
+<li>
+<code>THREADS</code> (default: 1): Number of threads of the compilation process</li>
+<li>
+<code>TESTS</code> (default: all): Tests which will be run</li>
+<li>
+<code>RUBBERBAND_SRC</code> (default: <code>$PWD/../core</code>): Directory of rubberband's core
+library source code</li>
+</ul>
+
+<h1>
+<a id="language-overview" class="anchor" href="#language-overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Language Overview</h1>
 
 <p>This section will give an overview of the goals and the characteristics of
 Rubberband.</p>
 
-<h3>
-<a id="design-goals" class="anchor" href="#design-goals" aria-hidden="true"><span class="octicon octicon-link"></span></a>Design Goals</h3>
+<h2>
+<a id="design-goals" class="anchor" href="#design-goals" aria-hidden="true"><span class="octicon octicon-link"></span></a>Design Goals</h2>
 
 <p>The Rubberband programming language is an experimental programming language
 created with the main objective of being as customizable by the developer as
@@ -97,8 +154,8 @@ beyond the very basic will interfere with that.</li>
 those described above are enough to give an idea of why the language is like
 it is.</p>
 
-<h3>
-<a id="characteristics" class="anchor" href="#characteristics" aria-hidden="true"><span class="octicon octicon-link"></span></a>Characteristics</h3>
+<h2>
+<a id="characteristics" class="anchor" href="#characteristics" aria-hidden="true"><span class="octicon octicon-link"></span></a>Characteristics</h2>
 
 <p>Now that the design goals have been set, the actual characteristics of the
 latest implementation will be described. Rubberband is:</p>
@@ -140,15 +197,15 @@ practical intents, it's the object you want. Without duck typing, the
 programmer is required to check if the type of the object is the right type.</li>
 </ul>
 
-<h2>
-<a id="language-presentation" class="anchor" href="#language-presentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Language Presentation</h2>
+<h1>
+<a id="language-presentation" class="anchor" href="#language-presentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Language Presentation</h1>
 
 <p>The previous section only passed by the features of the Rubberband, comparing
 them with similar features in other languages. This section will present the
 language and show its features on their own.</p>
 
-<h3>
-<a id="objects" class="anchor" href="#objects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Objects</h3>
+<h2>
+<a id="objects" class="anchor" href="#objects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Objects</h2>
 
 <p>As seen before, Rubberband is a purely object-oriented, message-based,
 classless, reflexive, duck typed, experimental programming language. As a
@@ -186,8 +243,8 @@ object, the only difference being the lack of curly braces. More details on
 blocks will be given in the following section.</li>
 </ul>
 
-<h3>
-<a id="messages-and-answers" class="anchor" href="#messages-and-answers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Messages and answers</h3>
+<h2>
+<a id="messages-and-answers" class="anchor" href="#messages-and-answers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Messages and answers</h2>
 
 <p>Rubberband is a message-based message. This means that the programmer gets
 information and modifies the state of an object by sending messages to it.
@@ -211,7 +268,11 @@ in this case, the third element of the array. There are two ways in which an
 object can react to a message: it either gives an answer or it causes a runtime
 error if the object doesn't respond to that message. For example, if you sent
 <code>4</code> instead of <code>2</code> to <code>arr</code>, since that index is out of range, that would
-generate a runtime error (TODO runtime error message here?).</p>
+generate a runtime error:</p>
+
+<pre><code>terminate called after throwing an instance of 'rbb::in_statement_error'
+  what(): In statement "~ arr 4": When sending message 4 to object (|10, 20, 30, 40): Message not recognized
+</code></pre>
 
 <p>Of course, to send a second message to the answer of a message send, just place
 the second message at the right side of the first one, and the same for any
@@ -234,8 +295,8 @@ finally, the message <code>4</code> is sent, giving is the value of the full exp
 control flow, accessing array elements, and other operations -- is done by
 sending messages to objects. Here are some examples on how that works.</p>
 
-<h4>
-<a id="variable-assignment-and-access" class="anchor" href="#variable-assignment-and-access" aria-hidden="true"><span class="octicon octicon-link"></span></a>Variable assignment and access</h4>
+<h3>
+<a id="variable-assignment-and-access" class="anchor" href="#variable-assignment-and-access" aria-hidden="true"><span class="octicon octicon-link"></span></a>Variable assignment and access</h3>
 
 <p>The message send is the only operation in the language, so, even when the
 programming is, say, creating or accessing the value of a variable, they are
@@ -257,8 +318,8 @@ which is the block's context (or scope) -- and also usually a table. Then, to
 access the <code>pi</code> variable, as depicted in the second line, you just need to send
 the <code>pi</code> symbol to the context.</p>
 
-<h4>
-<a id="arithmetic-and-comparison" class="anchor" href="#arithmetic-and-comparison" aria-hidden="true"><span class="octicon octicon-link"></span></a>Arithmetic and Comparison</h4>
+<h3>
+<a id="arithmetic-and-comparison" class="anchor" href="#arithmetic-and-comparison" aria-hidden="true"><span class="octicon octicon-link"></span></a>Arithmetic and Comparison</h3>
 
 <p>As well as variables, arithmetic operations are also based in the message send
 operation. Here's how arithmetic looks like in Rubberband:</p>
@@ -293,8 +354,8 @@ methods of any number, going by the names of <code>&lt;</code>, <code>&gt;</code
 that they result in a boolean object; in the example, the <code>overweight</code> variable
 will be assigned <code>?1</code>, that is, true.</p>
 
-<h4>
-<a id="control-flow" class="anchor" href="#control-flow" aria-hidden="true"><span class="octicon octicon-link"></span></a>Control Flow</h4>
+<h3>
+<a id="control-flow" class="anchor" href="#control-flow" aria-hidden="true"><span class="octicon octicon-link"></span></a>Control Flow</h3>
 
 <p>There are no special keywords to handle control flow in the core language:
 control flow, just like other operations, is also done by sending messages --
@@ -319,8 +380,8 @@ out the string representation of an object).</p>
 recursion (as we're going to see in the next section) and they're also provided
 by the standard library, which will be introduced later.</p>
 
-<h3>
-<a id="blocks" class="anchor" href="#blocks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Blocks</h3>
+<h2>
+<a id="blocks" class="anchor" href="#blocks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Blocks</h2>
 
 <p>Blocks are briefly introduced in the beginning of the language introduction
 section and used in the previous example. Here, they're going to be explained in
@@ -421,6 +482,17 @@ context of the <code>factorial</code> block; this means that will be able to dir
 access and modify anything in the parent context -- that's why <code>n</code> and <code>self</code>
 are accessible from inside the second block.</p>
 
+<p>(TODO below: better wording) </p>
+
+<p><code>@</code> -- which is attributed to <code>self</code> -- is the self-reference. In this case, it
+is needed to do the recursive call to <code>factorial</code>. Suppose we send <code>2</code> to a
+<code>factorial</code> instance. <code>~n == 0</code> will be false, so the block
+<code>{ !~n * ~self~(~n - 1) }</code> will be called -- this block will first get the value
+of <code>n</code>, then call the self-reference with <code>~n - 1</code>. Note that we have to call
+<code>~self~(~n - 1)</code>; that's because the self-reference is a reference to the
+<em>block</em>, not to the <em>current instance</em> of it. Then, we recursively calculate the
+factorial of <code>2</code>.</p>
+
 <p>A final note on why it was necessary to declare the <code>n</code> and <code>self</code> variables.
 That's needed because blocks don't automatically bind to their parent scope, so
 if we, instead, did:</p>
@@ -440,6 +512,32 @@ this would result in a runtime error. Even if the runtime error didn't happen,
 <code>@</code> is a reference to the else block, not to <code>factorial</code>; in this case, the
 stopping condition would never be checked and the program would enter in an
 endless loop.</p>
+
+<h2>
+<a id="object-metainformation-or-reflection" class="anchor" href="#object-metainformation-or-reflection" aria-hidden="true"><span class="octicon octicon-link"></span></a>Object Metainformation (or Reflection)</h2>
+
+<p>TODO</p>
+
+<h2>
+<a id="raising-runtime-errors" class="anchor" href="#raising-runtime-errors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Raising Runtime Errors</h2>
+
+<p>In some situations, to prevent incorrect behavior, the programmer needs to be
+able to raise an error and abort the execution of the program. In Rubberband,
+the boolean object provides the <code>^</code> method for that. Let's take the factorial
+example again:</p>
+
+<pre><code>~:factorial -&gt; {
+  ~:n -&gt; $, self -&gt; @
+
+  !~n == 0?~ {
+    !1
+  } {
+    !$ * (@~(~n - 1))
+  }
+}
+</code></pre>
+
+<p>TODO</p>
       </section>
     </div>
 
