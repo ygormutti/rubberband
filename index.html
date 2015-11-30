@@ -514,9 +514,61 @@ stopping condition would never be checked and the program would enter in an
 endless loop.</p>
 
 <h2>
-<a id="object-metainformation-or-reflection" class="anchor" href="#object-metainformation-or-reflection" aria-hidden="true"><span class="octicon octicon-link"></span></a>Object Metainformation (or Reflection)</h2>
+<a id="object-metainformation" class="anchor" href="#object-metainformation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Object Metainformation</h2>
 
-<p>TODO</p>
+<p>Metainformation -- or reflection -- is contextual information about the object
+itself. <em>Any</em> object provides metainfo; the methods used to acquired that
+information are <code>&lt;&lt;</code> and <code>&lt;&lt;?</code>. Respectively, they provide information about
+what messages an object responds and about the object's type -- or, rather, the
+interfaces it conforms to.</p>
+
+<h3>
+<a id="the--method" class="anchor" href="#the--method" aria-hidden="true"><span class="octicon octicon-link"></span></a>The <code>&lt;&lt;</code> Method</h3>
+
+<p>The first method, <code>&lt;&lt;</code>, can get any object as its message and answers a boolean
+-- <code>?1</code> if the receiver responds to the message, <code>?0</code> otherwise. This is
+important because, if an object gets a message it doesn't respond to, it will
+raise a runtime error. For example:</p>
+
+<pre><code>~:plus_1 -&gt; {
+  !$ + 1
+}()
+</code></pre>
+
+<p>Here, we create a block and instance it in the same expression, then save it in
+the <code>plus_1</code> variable -- we instance it with <code>()</code> because the context is not
+needed in this case. <code>plus_1</code> obviously expects a number as its message, since
+the method <code>+</code> is being called with a number. But if we, for instance, call it
+with a symbol, like this:</p>
+
+<pre><code>%inspect_object(~plus_1 five)
+</code></pre>
+
+<p>the runtime result will be:</p>
+
+<pre><code>terminate called after throwing an instance of 'rbb::in_statement_error'
+  what():  In statement "$ + 1": When sending message + to object five: Message not recognized
+</code></pre>
+
+<p>A runtime error happened because <code>five</code> is a symbol and symbols do not respond
+to the <code>+</code> method. To prevent this from happening, we can check if the message
+has that method using <code>&lt;&lt;</code>:</p>
+
+<pre><code>~:checked_plus_1 -&gt; {
+  ~:msg -&gt; $
+
+  !~msg &lt;&lt; +?~ {
+    !~msg + 1
+  } {
+    !()
+  }
+}(:)
+
+%inspect_object(~checked_plus_1 10)
+%inspect_object(~checked_plus_1 five)
+</code></pre>
+
+<p>TODO WIP</p>
 
 <h2>
 <a id="raising-runtime-errors" class="anchor" href="#raising-runtime-errors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Raising Runtime Errors</h2>
