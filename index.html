@@ -552,7 +552,8 @@ with a symbol, like this:</p>
 
 <p>A runtime error happened because <code>five</code> is a symbol and symbols do not respond
 to the <code>+</code> method. To prevent this from happening, we can check if the message
-has that method using <code>&lt;&lt;</code>:</p>
+has that method using <code>&lt;&lt;</code>. This time, we have to set an empty table as the
+context, since we're defining a variable inside the block:</p>
 
 <pre><code>~:checked_plus_1 -&gt; {
   ~:msg -&gt; $
@@ -564,9 +565,51 @@ has that method using <code>&lt;&lt;</code>:</p>
   }
 }(:)
 
-%inspect_object(~checked_plus_1 10)
 %inspect_object(~checked_plus_1 five)
+%inspect_object(~checked_plus_1 10)
 </code></pre>
+
+<p>Now, if we pass a message that does not have the <code>+</code> method -- like <code>five</code>, for
+example --, <code>checked_plus_1</code> will answer <code>()</code> instead of raising a runtime
+error, not interrupting the execution of the program:</p>
+
+<pre><code>()
+11
+</code></pre>
+
+<p><code>&lt;&lt;</code> can also be used to check if an index is inside the bounds of an array or
+if a given symbol is defined in a table:</p>
+
+<pre><code>%inspect_object((|10, 20, 30) &lt;&lt; 3)                 # ?0
+%inspect_object((:a -&gt; 10, b -&gt; 20, c -&gt; 30) &lt;&lt; b)  # ?1
+</code></pre>
+
+<h3>
+<a id="the--method-1" class="anchor" href="#the--method-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>The <code>&lt;&lt;?</code> method</h3>
+
+<p>The second method, <code>&lt;&lt;?</code>, is used to gather information about the type of an
+object or about the interfaces it conforms to. When an object conforms to some
+interface, it means that it implements some behaviors expected from the objects
+which conform to it. For instance, if an object conforms to the <code>[0]</code> interface,
+it means that it responds properly to all number-related messages -- in other
+words, it is a number.</p>
+
+<p>Going back to <code>checked_plus_1</code>, we can see a flaw in its implementation:</p>
+
+<pre><code>%inspect_object(~checked_plus_1|10, 20, 30)
+</code></pre>
+
+<p>Executing it we get this:</p>
+
+<pre><code>terminate called after throwing an instance of 'rbb::in_statement_error'
+  what():  In statement "~ msg + 1": When sending message 1 to object [unknown data]: Array expected
+</code></pre>
+
+<p>This error happens because, inside <code>checked_plus_1</code>, we only check if the
+message contains the <code>+</code> method. An array, which does contain the <code>+</code> method,
+will pass that check, but the <code>+</code> method of the array does not mean "sum", but
+rather "concatenate", and it expects another array, not a number -- which is why
+the runtime error is raised.</p>
 
 <p>TODO WIP</p>
 
