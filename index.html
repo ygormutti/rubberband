@@ -58,7 +58,7 @@ as scripts from the <code>rbbs</code> program.</p>
 </ul>
 
 <p>No extra dependencies are needed. Note that it's possible that it works in a
-different configuration -- e.g., a newer version of clang or gcc --, but it has
+different configuration -- e.g., an older version of clang or gcc --, but it has
 never been tested.</p>
 
 <h2>
@@ -482,15 +482,17 @@ context of the <code>factorial</code> block; this means that will be able to dir
 access and modify anything in the parent context -- that's why <code>n</code> and <code>self</code>
 are accessible from inside the second block.</p>
 
-<p>(TODO below: better wording) </p>
+<p>The self-reference, as introduced before, is denoted by <code>@</code> -- it was attributed
+to the <code>self</code> variable for reasons which will be explained shortly. The 
+self-reference is used in this case because we need it to do the recursive calls
+that are necessary to calculate the factorial of a number.</p>
 
-<p><code>@</code> -- which is attributed to <code>self</code> -- is the self-reference. In this case, it
-is needed to do the recursive call to <code>factorial</code>. Suppose we send <code>2</code> to a
-<code>factorial</code> instance. <code>~n == 0</code> will be false, so the block
-<code>{ !~n * ~self~(~n - 1) }</code> will be called -- this block will first get the value
-of <code>n</code>, then call the self-reference with <code>~n - 1</code>. Note that we have to call
-<code>~self~(~n - 1)</code>; that's because the self-reference is a reference to the
-<em>block</em>, not to the <em>current instance</em> of it. Then, we recursively calculate the
+<p>For example: Suppose we send <code>2</code> to a <code>factorial</code> instance. <code>~n == 0</code> will be
+false, so the block <code>{ !~n * ~self~(~n - 1) }</code> will be called. This block will
+first get the value of <code>n</code>, then call itself with <code>~n - 1</code> as the message. Note
+that we have to call <code>~self~(~n - 1)</code>; that's because the self-reference is a
+reference to the <em>block</em>, not to the <em>current instance</em> of it, so we need to
+instance it in order to call it. From this, we recursively calculate the
 factorial of <code>2</code>.</p>
 
 <p>A final note on why it was necessary to declare the <code>n</code> and <code>self</code> variables.
@@ -594,7 +596,8 @@ which conform to it. For instance, if an object conforms to the <code>[0]</code>
 it means that it responds properly to all number-related messages -- in other
 words, it is a number.</p>
 
-<p>Going back to <code>checked_plus_1</code>, we can see a flaw in its implementation:</p>
+<p>For example, going back to <code>checked_plus_1</code>, we can see a flaw in its
+implementation:</p>
 
 <pre><code>%inspect_object(~checked_plus_1|10, 20, 30)
 </code></pre>
@@ -611,7 +614,27 @@ will pass that check, but the <code>+</code> method of the array does not mean "
 rather "concatenate", and it expects another array, not a number -- which is why
 the runtime error is raised.</p>
 
-<p>TODO WIP</p>
+<p>To avoid that, we can check if the object being received by <code>checked_plus_1</code> is
+<em>of the kind</em> we want it to be, that is, if it is either a number or a
+number-like object. To check that, we use the already mentioned <code>[0]</code> interface:</p>
+
+<pre><code>~:checked_plus_2 -&gt; {
+  ~:msg -&gt; $
+
+  !~msg &lt;&lt;? [0]?~ {
+    !~msg + 1
+  } {
+    !()
+  }
+}(:)
+</code></pre>
+
+<p>If we try to do the same as before with the new function:</p>
+
+<pre><code>%inspect_object(~checked_plus_2|10, 20, 30)
+</code></pre>
+
+<p>We get what we were expecting -- that is, <code>()</code> is printed out.</p>
 
 <h2>
 <a id="raising-runtime-errors" class="anchor" href="#raising-runtime-errors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Raising Runtime Errors</h2>
@@ -627,12 +650,39 @@ example again:</p>
   !~n == 0?~ {
     !1
   } {
-    !$ * (@~(~n - 1))
+    !~n * (~self~(~n - 1))
   }
-}
+}(:)
 </code></pre>
 
-<p>TODO</p>
+<p>That function has a little problem: if it gets a negative number, it will run
+forever -- or at least until it segfaults. Replacing the condition by <code>~n &lt;= 0</code>
+would help make the function not segfault, but then that definition is incorrect
+-- the factorial of -1 is not 1; the factorial of -1 <em>does not exist</em>.</p>
+
+<p>Raising an error will prevent wrong results from being yielded:</p>
+
+<pre><code>~:factorial -&gt; {
+  ~:n -&gt; $, self -&gt; @
+  ~n &lt; 0^ negative_numbers_dont_have_a_factorial
+
+  # ...
+}(:)
+
+%inspect_object(~factorial -1)
+</code></pre>
+
+<p>You can pass any object to <code>^</code>; what's going to be done with it is up to the
+implementation. <code>rbbs</code> simply doesn't treat it:</p>
+
+<pre><code>terminate called after throwing an instance of 'rbb::runtime_error'
+  what():  Runtime error (error object: negative_numbers_dont_have_a_factorial)
+</code></pre>
+
+<p>It's important to point out that runtime errors are <em>not</em> exceptions. You can't
+catch them in any way (they simply abort the execution of the program), and,
+although you can attach any object you want to them, that object is only ever
+going to be used by the implementation, if at all.</p>
       </section>
     </div>
 
