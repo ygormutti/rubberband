@@ -39,7 +39,7 @@ changing, so, at the moment you're reading this, the document may be outdated
 when compared to the actual implementation -- so beware.</p>
 
 <h1>
-<a id="building" class="anchor" href="#building" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building</h1>
+<a id="building" class="anchor" href="#building" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Building</h1>
 
 <p>The current project consists of the core library <code>librubberband</code> and the
 reference interpreter <code>rbbs</code> (stands for <strong>r</strong>ub<strong>b</strong>er<strong>b</strong>and <strong>s</strong>cript).
@@ -47,7 +47,7 @@ Throughout the entirety of this manual, it is assumed that all examples are ran
 as scripts from the <code>rbbs</code> program.</p>
 
 <h2>
-<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h2>
 
 <p>Currently, the dependencies to build Rubberband are:</p>
 
@@ -62,7 +62,7 @@ different configuration -- e.g., an older version of clang or gcc --, but it has
 never been tested.</p>
 
 <h2>
-<a id="compiling-rbbs" class="anchor" href="#compiling-rbbs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compiling rbbs</h2>
+<a id="compiling-rbbs" class="anchor" href="#compiling-rbbs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Compiling rbbs</h2>
 
 <p>If you just want to build and run <code>rbbs</code>, from inside the <code>src</code> subdirectory of
 the repository, run:</p>
@@ -78,7 +78,7 @@ this writing.</p>
 <p>For more info on how to use CMake, check out its own documentation.</p>
 
 <h2>
-<a id="running-tests" class="anchor" href="#running-tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running tests</h2>
+<a id="running-tests" class="anchor" href="#running-tests" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Running tests</h2>
 
 <p>You can also run the tests of the <code>librubberband</code> library. There's a
 <code>runtests.sh</code> script inside the <code>src/test</code> dir, which can be run from any fairly
@@ -100,13 +100,13 @@ library source code</li>
 </ul>
 
 <h1>
-<a id="language-overview" class="anchor" href="#language-overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Language Overview</h1>
+<a id="language-overview" class="anchor" href="#language-overview" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Language Overview</h1>
 
 <p>This section will give an overview of the goals and the characteristics of
 Rubberband.</p>
 
 <h2>
-<a id="design-goals" class="anchor" href="#design-goals" aria-hidden="true"><span class="octicon octicon-link"></span></a>Design Goals</h2>
+<a id="design-goals" class="anchor" href="#design-goals" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Design Goals</h2>
 
 <p>The Rubberband programming language is an experimental programming language
 created with the main objective of being as customizable by the developer as
@@ -155,7 +155,7 @@ those described above are enough to give an idea of why the language is like
 it is.</p>
 
 <h2>
-<a id="characteristics" class="anchor" href="#characteristics" aria-hidden="true"><span class="octicon octicon-link"></span></a>Characteristics</h2>
+<a id="characteristics" class="anchor" href="#characteristics" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Characteristics</h2>
 
 <p>Now that the design goals have been set, the actual characteristics of the
 latest implementation will be described. Rubberband is:</p>
@@ -198,14 +198,14 @@ programmer is required to check if the type of the object is the right type.</li
 </ul>
 
 <h1>
-<a id="language-presentation" class="anchor" href="#language-presentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Language Presentation</h1>
+<a id="language-presentation" class="anchor" href="#language-presentation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Language Presentation</h1>
 
 <p>The previous section only passed by the features of the Rubberband, comparing
 them with similar features in other languages. This section will present the
 language and show its features on their own.</p>
 
 <h2>
-<a id="objects" class="anchor" href="#objects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Objects</h2>
+<a id="objects" class="anchor" href="#objects" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Objects</h2>
 
 <p>As seen before, Rubberband is a purely object-oriented, message-based,
 classless, reflexive, duck typed, experimental programming language. As a
@@ -244,7 +244,7 @@ blocks will be given in the following section.</li>
 </ul>
 
 <h2>
-<a id="messages-and-answers" class="anchor" href="#messages-and-answers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Messages and answers</h2>
+<a id="messages-and-answers" class="anchor" href="#messages-and-answers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Messages and answers</h2>
 
 <p>Rubberband is a message-based message. This means that the programmer gets
 information and modifies the state of an object by sending messages to it.
@@ -296,7 +296,7 @@ control flow, accessing array elements, and other operations -- is done by
 sending messages to objects. Here are some examples on how that works.</p>
 
 <h3>
-<a id="variable-assignment-and-access" class="anchor" href="#variable-assignment-and-access" aria-hidden="true"><span class="octicon octicon-link"></span></a>Variable assignment and access</h3>
+<a id="variable-assignment-and-access" class="anchor" href="#variable-assignment-and-access" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Variable assignment and access</h3>
 
 <p>The message send is the only operation in the language, so, even when the
 programming is, say, creating or accessing the value of a variable, they are
@@ -319,7 +319,7 @@ access the <code>pi</code> variable, as depicted in the second line, you just ne
 the <code>pi</code> symbol to the context.</p>
 
 <h3>
-<a id="arithmetic-and-comparison" class="anchor" href="#arithmetic-and-comparison" aria-hidden="true"><span class="octicon octicon-link"></span></a>Arithmetic and Comparison</h3>
+<a id="arithmetic-and-comparison" class="anchor" href="#arithmetic-and-comparison" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arithmetic and Comparison</h3>
 
 <p>As well as variables, arithmetic operations are also based in the message send
 operation. Here's how arithmetic looks like in Rubberband:</p>
@@ -355,7 +355,7 @@ that they result in a boolean object; in the example, the <code>overweight</code
 will be assigned <code>?1</code>, that is, true.</p>
 
 <h3>
-<a id="control-flow" class="anchor" href="#control-flow" aria-hidden="true"><span class="octicon octicon-link"></span></a>Control Flow</h3>
+<a id="control-flow" class="anchor" href="#control-flow" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Control Flow</h3>
 
 <p>There are no special keywords to handle control flow in the core language:
 control flow, just like other operations, is also done by sending messages --
@@ -381,7 +381,7 @@ recursion (as we're going to see in the next section) and they're also provided
 by the standard library, which will be introduced later.</p>
 
 <h2>
-<a id="blocks" class="anchor" href="#blocks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Blocks</h2>
+<a id="blocks" class="anchor" href="#blocks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Blocks</h2>
 
 <p>Blocks are briefly introduced in the beginning of the language introduction
 section and used in the previous example. Here, they're going to be explained in
@@ -516,7 +516,7 @@ stopping condition would never be checked and the program would enter in an
 endless loop.</p>
 
 <h2>
-<a id="object-metainformation" class="anchor" href="#object-metainformation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Object Metainformation</h2>
+<a id="object-metainformation" class="anchor" href="#object-metainformation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Object Metainformation</h2>
 
 <p>Metainformation -- or reflection -- is contextual information about the object
 itself. <em>Any</em> object provides metainfo; the methods used to acquired that
@@ -525,7 +525,7 @@ what messages an object responds and about the object's type -- or, rather, the
 interfaces it conforms to.</p>
 
 <h3>
-<a id="the--method" class="anchor" href="#the--method" aria-hidden="true"><span class="octicon octicon-link"></span></a>The <code>&lt;&lt;</code> Method</h3>
+<a id="the--method" class="anchor" href="#the--method" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The <code>&lt;&lt;</code> Method</h3>
 
 <p>The first method, <code>&lt;&lt;</code>, can get any object as its message and answers a boolean
 -- <code>?1</code> if the receiver responds to the message, <code>?0</code> otherwise. This is
@@ -587,7 +587,7 @@ if a given symbol is defined in a table:</p>
 </code></pre>
 
 <h3>
-<a id="the--method-1" class="anchor" href="#the--method-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>The <code>&lt;&lt;?</code> method</h3>
+<a id="the--method-1" class="anchor" href="#the--method-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The <code>&lt;&lt;?</code> method</h3>
 
 <p>The second method, <code>&lt;&lt;?</code>, is used to gather information about the type of an
 object or about the interfaces it conforms to. When an object conforms to some
@@ -637,7 +637,7 @@ number-like object. To check that, we use the already mentioned <code>[0]</code>
 <p>We get what we were expecting -- that is, <code>()</code> is printed out.</p>
 
 <h2>
-<a id="raising-runtime-errors" class="anchor" href="#raising-runtime-errors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Raising Runtime Errors</h2>
+<a id="raising-runtime-errors" class="anchor" href="#raising-runtime-errors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Raising Runtime Errors</h2>
 
 <p>In some situations, to prevent incorrect behavior, the programmer needs to be
 able to raise an error and abort the execution of the program. In Rubberband,
@@ -683,6 +683,152 @@ implementation. <code>rbbs</code> simply doesn't treat it:</p>
 catch them in any way (they simply abort the execution of the program), and,
 although you can attach any object you want to them, that object is only ever
 going to be used by the implementation, if at all.</p>
+
+<h1>
+<a id="base-library" class="anchor" href="#base-library" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Base Library</h1>
+
+<p>So far, the pure base language has been presented. But, since it lacks things
+like a proper loop control structure, proper function argument handling, etc.,
+using the core Rubberband language for normal tasks directly can be quite
+difficult. But, as mentioned in the introduction, this isn't its purpose either:
+the purpose of Rubberband -- aside from being an experimental language -- is
+providing the most basic tools necessary to enable the creation of useful
+constructs, libraries, frameworks, etc., which will, <em>then</em>, be used to peform
+normal, daily tasks.</p>
+
+<p>To exemplify that, Rubberband has its own base library implemented completely in
+Rubberband. It features a limited set of functionalities, but it shows a bit of
+what can be done with Rubberband currently.</p>
+
+<p>The base library is located at the <code>src/mod</code> directory in the <code>rubberband</code>
+repository. To use it, add that directory to the module lookup path with the
+<code>-p</code> switch of <code>rbbs</code> and load it with <code>-m base</code> (<code>--help</code> will give you more
+detailed information on command-line switches for <code>rbbs</code>).</p>
+
+<h2>
+<a id="while" class="anchor" href="#while" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>while</code>
+</h2>
+
+<p>The <code>while</code> function implements a conventional while loop, preventing you to
+mess with blocks and recursion by hand. The following example calculates the
+closest power of two smaller than the number 999999:</p>
+
+<pre><code>~:c -&gt; 1
+
+~while~ { !~c * 2 &lt; (~n) } {
+  ~:c -&gt; ~c * 2
+} 
+
+%inspect_object(~c)
+</code></pre>
+
+<p>You may have noticed that there's a second <code>~</code> after the call to <code>while</code>. That's
+because <code>while</code> needs to pass a context to both blocks it receives so that the
+programmer is able to properly use the variables they declare outside those
+blocks. The context can be any object, but, usually, it will be the current
+context, that is, <code>~</code>. This pattern will be present in all functions from the
+base library presented here.</p>
+
+<p>As for the actual usage of <code>while</code>, two arguments are passed aside from the
+context: a block containing a condition expression and an execution block. The
+second block will be repeatedly executed until the first block answers <code>?0</code>. In
+the example above, the number <code>524288</code> is printed.</p>
+
+<h2>
+<a id="fn" class="anchor" href="#fn" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>fn</code>
+</h2>
+
+<p>A "gotcha" mentioned before in the blocks section also applies in the case
+presented here. If you try to, say, put the code from before into a function and
+use raw blocks to do that, you have to be careful:</p>
+
+<pre><code>~:pow2_less_than -&gt; {
+  ~:c -&gt; 1
+
+  ~while~ { !~c * 2 &lt; $ } {
+    ~:c -&gt; ~c * 2
+  }
+
+  !~c
+}(:)
+
+%inspect_object(~pow2_less_than 999999)
+</code></pre>
+
+<p>Couple of problems with this implementation: first, since <code>pow2_less_than</code> is a
+block instance bound to an empty table, <code>while</code> is not available inside that
+block, which gives us an error:</p>
+
+<pre><code>terminate called after throwing an instance of 'rbb::in_statement_error'
+  what():  In statement "~ while ~ { !~ c * 2 &lt; $ } { ~ (:c -&gt; ~ c * 2) }": When sending message while to object (:c -&gt; 1): Message not recognized
+</code></pre>
+
+<p>We could try to "fix" it by binding the instance to <code>~</code> instead, but that would
+make <code>c</code> leak to the main context, which is undesirable most of the time. The
+best simple solution would be to create a copy of the context (by binding the
+instance to <code>~  + (:)</code>), but other problems would arise from that (needlessly
+copying every single thing, not being able to modify external objects, etc.).
+And even then, that code would be wrong, because calls the blocks it receives
+with <code>()</code> as the message, making the condition block <code>{ !~c * 2 &lt; $ }</code> return
+<code>?0</code> anytime it's called.</p>
+
+<p>To avoid dealing with all of that manually, the standard library has a <code>fn</code>
+function. Its purpose is to create a function that behaves more like a regular
+function from other languages, in that:</p>
+
+<ol>
+<li>You can pass it a list of arguments and not just one argument
+
+<ul>
+<li>All arguments you pass to it are already named (so no more fiddling with
+<code>$</code>)</li>
+</ul>
+</li>
+<li>Objects declared outside it can be accessed inside the function (and
+modified, if necessary)</li>
+<li>Objects declared inside it are automatically destroyed after the function
+finishes
+
+<ul>
+<li>If an object declared inside a function has the same name as one outside
+it, the former elides the latter</li>
+</ul>
+</li>
+</ol>
+
+<p>For example, our function would be written as this:</p>
+
+<pre><code>~:pow2_less_than -&gt; ~fn~ (|n) {
+  ~:c -&gt; 1
+
+  ~while~ { !~c * 2 &lt; (~n) } {
+    ~:c -&gt; ~c * 2
+  }
+
+  !~c
+}
+</code></pre>
+
+<p>Much simpler and less worrysome. The two arguments <code>fn</code> gets are a list
+containing the names of the arguments and the function block. To call it, pass
+the argument as a message:</p>
+
+<pre><code>%inspect_object(~pow2_less_than 999999)
+</code></pre>
+
+<p>This will print, again, <code>524288</code>.</p>
+
+<p>Functions with more arguments are called in a similar way: send the arguments as
+messages sequentially:</p>
+
+<pre><code>~:avg3 -&gt; ~fn~ (|num1, num2, num3) {
+  !(~num1) + (~num2) + (~num3) / 3
+} 
+
+%inspect_object(~avg3 100 200 250)
+</code></pre>
+
+<p>Prints <code>183</code>.</p>
       </section>
     </div>
 
