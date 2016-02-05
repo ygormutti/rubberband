@@ -229,7 +229,7 @@ object as an element -- but are not resizable: <code>|10, 20, 30</code>,
 <code>|a, 10, (|10, 20, 30), ?1</code>
 </li>
 <li>
-<strong>Tables</strong>, which map symbols to functions. They start with <code>:</code>, followed
+<strong>Tables</strong>, which map symbols to objects. They start with <code>:</code>, followed
 by the symbol-object pairs, separated by commas: <code>:a -&gt; 10, b -&gt; 20, c -&gt; 30</code>,
 <code>:yes -&gt; ?1, twelve -&gt; 12</code>,
 <code>:list -&gt; (|2, 3, 5, 7), table -&gt; (:happy -&gt; ?1, age -&gt; 25)</code>
@@ -246,7 +246,7 @@ blocks will be given in the following section.</li>
 <h2>
 <a id="messages-and-answers" class="anchor" href="#messages-and-answers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Messages and answers</h2>
 
-<p>Rubberband is a message-based message. This means that the programmer gets
+<p>Rubberband is a message-based language. This means that the programmer gets
 information and modifies the state of an object by sending messages to it.
 A message to an object can be any other object; to send a message, the
 programmer just needs to put the message at the side of the object.</p>
